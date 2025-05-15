@@ -1,9 +1,12 @@
-import { Text, View } from 'react-native';
+/* eslint-disable react/react-in-jsx-scope */
+import { Button, Icon, Layout, Text } from '@ui-kitten/components';
 
 export const HomeScreen = () => {
   return (
-    <View>
+    <Layout>
         <Text>HomeScreen</Text>
-    </View>
+        {/* <Icon name="facebook"/> */}
+        <Button accessoryLeft={<Icon name="facebook"/> }>Login with Facebook</Button>
+    </Layout>
   );
 };
