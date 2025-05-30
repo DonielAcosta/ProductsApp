@@ -1,6 +1,6 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { getProductsByPage } from '../../../actions/auth/products/get-products-by-page';
-import { useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import { MainLayout } from '../../layouts/MainLayout';
 import { FullScreenLoader } from '../../components/ui/FullScreenLoader';
 import { ProductList } from '../../components/products/ProductList';
@@ -8,14 +8,26 @@ import { ProductList } from '../../components/products/ProductList';
 export const HomeScreen = () => {
 
 
-  const {isLoading, data:products = []} = useQuery({
+  // const {isLoading, data:products = []} = useQuery({
+  //   queryKey:['products','infinite'],
+  //   staleTime: 100 * 60 * 60,
+  //   queryFn : ()=> getProductsByPage(0),
+  // });
+
+  const {isLoading, data, fetchNextPage} = useInfiniteQuery({
     queryKey:['products','infinite'],
     staleTime: 100 * 60 * 60,
-    queryFn : ()=> getProductsByPage(0),
+    initialPageParam:0,
+    queryFn : async(params)=> {
+      console.log(params);
+      return await getProductsByPage(params.pageParam);
+    },
+    getNextPageParam:(lastPage, allPages) => allPages.length,
   });
 
+
   // getProductsByPage(0);
-  console.log('products:', products);
+  // console.log('products:', products);
 
   return (
     <MainLayout
@@ -24,7 +36,7 @@ export const HomeScreen = () => {
     // rightAction={() => {}}
     // rightActionIcon="plus-outline"
     >
-      {isLoading ?  <FullScreenLoader/> : <ProductList products={products}/>}
+      {isLoading ?  <FullScreenLoader/> : <ProductList products={data?.pages.flat() ?? []} fetchNextPage={fetchNextPage}/>}
     </MainLayout>
   );
 };
