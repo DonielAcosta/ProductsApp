@@ -1,8 +1,8 @@
-/* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react/react-in-jsx-scope */
-import { Layout, Text } from '@ui-kitten/components';
 import { getProductsByPage } from '../../../actions/auth/products/get-products-by-page';
 import { useQuery } from '@tanstack/react-query';
+import { MainLayout } from '../../layouts/MainLayout';
+import { Text } from '@ui-kitten/components';
 
 export const HomeScreen = () => {
 
@@ -13,10 +13,16 @@ export const HomeScreen = () => {
     queryFn : ()=> getProductsByPage(0),
   });
 
-  getProductsByPage(0);
+  // getProductsByPage(0);
   return (
-    <Layout style={{ flex:1, justifyContent:'center',alignItems:'center' }}>
-        <Text>{JSON.stringify(products, null ,2)}</Text>
-    </Layout>
+    <MainLayout
+    title="TesloShop - Products"
+    subTitle="Aplicacion administrativa"
+    // rightAction={() => {}}
+    // rightActionIcon="plus-outline"
+    >
+      <Text>Matando la liga</Text>
+
+    </MainLayout>
   );
 };
