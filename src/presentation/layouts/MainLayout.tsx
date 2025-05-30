@@ -55,7 +55,7 @@ export const MainLayout = ({title,subTitle,rightAction,rightActionIcon,children}
         accessoryRight={() =><RenderRightAction/>}
       />
       <Divider />
-      <Layout style={{ height: '100%' }}>{children}</Layout>
+      <Layout style={{ flex:1 }}>{children}</Layout>
     </Layout>
   );
 };
