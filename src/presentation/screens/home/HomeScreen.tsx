@@ -1,19 +1,22 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react/react-in-jsx-scope */
-import { Button, Icon, Layout, Text } from '@ui-kitten/components';
-import { useAuthStore } from '../../store/auth/useAuthStore';
+import { Layout, Text } from '@ui-kitten/components';
 import { getProductsByPage } from '../../../actions/auth/products/get-products-by-page';
+import { useQuery } from '@tanstack/react-query';
 
 export const HomeScreen = () => {
 
-  const {logout} = useAuthStore();
+
+  const {isLoading, data:products =[]} = useQuery({
+    queryKey:['products','infinite'],
+    staleTime: 100 * 60 * 60,
+    queryFn : ()=> getProductsByPage(0),
+  });
 
   getProductsByPage(0);
   return (
     <Layout style={{ flex:1, justifyContent:'center',alignItems:'center' }}>
-        <Text>HomeScreen</Text>
-        {/* <Icon name="facebook"/> */}
-        <Button accessoryLeft={<Icon name="log-out-outline"/> } onPress={logout}>Cerrar Sesion</Button>
+        <Text>{JSON.stringify(products, null ,2)}</Text>
     </Layout>
   );
 };

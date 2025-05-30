@@ -8,13 +8,16 @@ import * as eva from '@eva-design/eva';
 import { useColorScheme } from 'react-native';
 import { EvaIconsPack } from '@ui-kitten/eva-icons';
 import { AuthProvider } from './presentation/providers/AuthProvider';
+import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
+
+const queryclients = new QueryClient();
 export const ProductsApp = () => {
 
   const colorSheme = useColorScheme();
   const theme = colorSheme === 'dark' ? eva.dark : eva.light;
   const backgroundColor = (colorSheme === 'dark') ? theme['color-basic-800'] : theme['color-basic-100'];
   return (
-    <>
+    <QueryClientProvider client={queryclients}>
       <IconRegistry icons={EvaIconsPack} />
       <ApplicationProvider {...eva} theme={theme}>
         <NavigationContainer theme = {{
@@ -33,6 +36,6 @@ export const ProductsApp = () => {
           </AuthProvider>
         </NavigationContainer>
       </ApplicationProvider>
-    </>
+    </QueryClientProvider>
   );
 };
