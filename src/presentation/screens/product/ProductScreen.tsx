@@ -1,32 +1,25 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react/react-in-jsx-scope */
+import { useRef } from 'react';
 import { Button, ButtonGroup, Input, Layout, useTheme } from '@ui-kitten/components';
 import { MainLayout } from '../../layouts/MainLayout';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { StackScreenProps } from '@react-navigation/stack';
 import { RootStackParams } from '../../navigation/StackNavigator';
-import { getProductById } from '../../../actions/auth/products/get-product-by-id';
-import { useRef } from 'react';
-import { FlatList, ScrollView } from 'react-native-gesture-handler';
-import { FadeInImage } from '../../components/ui/FadeInImage';
-import { Gender, Product, Size } from '../../../domain/entities/product';
+import { getProductById,updateCreateProduct } from '../../../actions/auth/products';
+import { ScrollView } from 'react-native-gesture-handler';
+import { Product } from '../../../domain/entities/product';
 import { MyIcon } from '../../components/ui/MyIcon';
 import { Formik } from 'formik';
-import { updateCreateProduct } from '../../../actions/auth/products/update-create-product';
+import { ProductImages } from '../../components/products/ProductImages';
+import { genders, sizes } from '../../../config/constants/constants';
 
-const sizes: Size[] = [
-  Size.Xs,
-  Size.S,
-  Size.M,
-  Size.L,
-  Size.Xl,
-  Size.Xxl,
-];
-const genders: Gender[] = [Gender.Kid,Gender.Men,Gender.Unisex,Gender.Women];
+
 interface Props extends StackScreenProps<RootStackParams,'ProductScreen'>{}
 export const ProductScreen = ({route}:Props) => {
   const productIdRef = useRef(route.params.productId);
   const theme = useTheme();
+  const queryClient = useQueryClient();
 
 
   //useQuery
@@ -38,8 +31,14 @@ export const ProductScreen = ({route}:Props) => {
   const mutation = useMutation({
     mutationFn: (data:Product) => updateCreateProduct({...data, id:productIdRef.current}),
     onSuccess(data:Product) {
-        // console.log('Success');
-        console.log({data});
+
+      productIdRef.current = data.id;
+      // console.log('Success');
+      // console.log({data});
+      queryClient.invalidateQueries({queryKey:['products', 'infinite']});
+      queryClient.invalidateQueries({queryKey:['product', data.id]});
+      // queryClient.setQueryData(['product', data.id],data);
+
 
     },
   });
@@ -59,19 +58,8 @@ export const ProductScreen = ({route}:Props) => {
         >
           <ScrollView style={{ flex:1 }}>
             {/* imagenes de productos */}
-            <Layout>
-              <FlatList
-              data={values.images}
-              keyExtractor={(item) => item}
-              horizontal
-              showsVerticalScrollIndicator={false}
-              renderItem={({item}) =>(
-                <FadeInImage
-                  uri= {item}
-                  style={{ width:300, height:300, marginHorizontal:7 }}
-                />
-              )}
-              />
+            <Layout style={{ marginVertical:10, justifyContent:'center', alignItems: 'center' }}>
+              <ProductImages images={values.images}/>
             </Layout>
             {/* formulario */}
             <Layout style={{ marginHorizontal:10 }}>

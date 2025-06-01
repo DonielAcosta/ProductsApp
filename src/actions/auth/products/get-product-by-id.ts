@@ -19,18 +19,13 @@ const emptyProduct: Product = {
   tags: [],
 };
 
-
-
 export const getProductById = async (id: string):Promise<Product> => {
 
   if ( id === 'new' ) {return emptyProduct;}
-
-
   try {
     const { data } = await tesloApi.get<TesloProduct>(`/products/${id}`);
 
     return ProductMapper.tesloProductToEntity(data);
-
 
   } catch (error) {
     console.log(error);

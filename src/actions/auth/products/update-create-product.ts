@@ -10,8 +10,8 @@ export const updateCreateProduct = ( product: Partial<Product> ) => {
       return updateProduct(product);
     }
 
-    throw new Error('Creacion no esta implementada');
-
+    // throw new Error('Creacion no esta implementada');
+    return createProduct(product);
 };
 //revisar si viene el usuario
 const updateProduct = async ( product: Partial<Product> ) => {
@@ -42,4 +42,24 @@ const prepareImages = (images: string[])=>{
     return images.map(
         image =>image.split('/').pop()
     );
+};
+
+const createProduct = async ( product: Partial<Product>) => {
+    const {id,images = [], ...rest } = product;
+
+
+    try {
+        const checkedImages = prepareImages(images);
+
+        const {data} = await tesloApi.post(`/products/`,{
+            images:checkedImages,
+            ...rest,
+        });
+        return data;
+    } catch (error) {
+        if(isAxiosError(error)){
+            console.log(error.request?.data);
+        }
+        throw new Error('Error al actualizar producto');
+    }
 };
