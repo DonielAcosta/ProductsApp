@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { User } from '../../../domain/entities/user';
 import { AuthStatus } from '../../../infrastructure/interfaces/auth.status';
 import { authCheckStatus, authLogin } from '../../../actions/auth/auth';
-import { StorageAdapter } from '../../../config/adapters-storage';
+import { StorageAdapter } from '../../../config/adapters/adapters-storage';
 // import { StorageAdapter } from '../../../config/adapters/adapters-storage';
 
 
