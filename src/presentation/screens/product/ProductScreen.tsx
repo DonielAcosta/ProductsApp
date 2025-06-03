@@ -56,7 +56,7 @@ export const ProductScreen = ({route}: Props) => {
           setFieldValue('images', [...values.images, ...photos]);
 
         }}
-        rightActionIcon="camera-outline"
+        rightActionIcon="image-outline"
         >
           <ScrollView style={{flex: 1}}>
             {/* Imágenes de el producto */}
